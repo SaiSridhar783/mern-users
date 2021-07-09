@@ -13,11 +13,13 @@
   padding: 1rem;
   color: white;
   background: #292929;
+  transition: all 300ms;
 }
 
 .user-item a:hover,
 .user-item a:active {
   background: #ffd900;
+  transition: all 300ms;
 }
 
 .user-item__content {
