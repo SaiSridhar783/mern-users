@@ -4,41 +4,27 @@ import { Link } from "react-router-dom";
 import MainHeader from "./MainHeader";
 import NavLinks from "./NavLinks";
 import "./MainNavigation.css";
-
-import {
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  useDisclosure,
-} from "@chakra-ui/react";
+import SideDrawer from "../UI/SideDrawer";
+import { useDisclosure } from "@chakra-ui/react";
+import { HamburgerIcon } from "@chakra-ui/icons";
 
 const MainNavigation = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <React.Fragment>
-      <Drawer placement="left" isOpen={isOpen} onClose={onClose}>
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerHeader borderBottomWidth="1px"></DrawerHeader>
-          <DrawerBody>
-            <aside className="side-drawer">
-              <nav>
-                <NavLinks />
-              </nav>
-            </aside>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
+      <SideDrawer onClose={onClose} isOpen={isOpen} />
 
       <MainHeader>
-        <button className="main-navigation__menu-btn" onClick={onOpen}>
-          <span />
-          <span />
-          <span />
-        </button>
+        <HamburgerIcon
+          display={{ lg: "none" }}
+          fontSize="3rem"
+          color="white"
+          _hover={{ cursor: "pointer" }}
+          mr="2rem"
+          onClick={onOpen}
+        />
+
         <h1 className="main-navigation__title">
           <Link to="/">YourPlaces</Link>
         </h1>
