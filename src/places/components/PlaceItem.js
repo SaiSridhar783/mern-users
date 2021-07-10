@@ -5,7 +5,7 @@ import Button from "../../shared/components/UI/Button/Button";
 import "./PlaceItem.css";
 import Modal from "../../shared/components/UI/Modal.jsx";
 import { useDisclosure } from "@chakra-ui/react";
-import Map from "../../shared/components/UI/Map";
+import Map from "../../shared/components/UI/Map.jsx";
 
 const PlaceItem = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
