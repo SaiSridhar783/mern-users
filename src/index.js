@@ -4,11 +4,16 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { ChakraProvider } from "@chakra-ui/react";
 
+import { Provider } from "react-redux";
+import store from "./store/index";
+
 import "./index.css";
 
 ReactDOM.render(
-  <ChakraProvider>
-    <App />
-  </ChakraProvider>,
-  document.getElementById("root")
+    <Provider store={store}>
+        <ChakraProvider>
+            <App />
+        </ChakraProvider>
+    </Provider>,
+    document.getElementById("root")
 );

@@ -9,10 +9,16 @@ import {
     VALIDATOR_MINLENGTH,
     VALIDATOR_REQUIRE,
 } from "../../shared/utils/validators";
+import { useDispatch } from "react-redux";
 
 import "./Auth.css";
+import { authActions } from "../../store/authSlice";
+import { useHistory } from "react-router";
 
 const Auth = (props) => {
+    const dispatch = useDispatch();
+    const history = useHistory();
+
     const [isLoginMode, setIsLoginMode] = useState(false);
     const [formState, inputHandler, setFormData] = useFormState(
         {
@@ -55,7 +61,8 @@ const Auth = (props) => {
 
     const submitFormHandler = (event) => {
         event.preventDefault();
-        console.log(formState);
+        dispatch(authActions.login());
+        history.goBack();
     };
 
     return (

@@ -6,6 +6,7 @@ import "./PlaceItem.css";
 import Modal from "../../shared/components/UI/Modal.jsx";
 import { Heading, useDisclosure } from "@chakra-ui/react";
 import Map from "../../shared/components/UI/Map.jsx";
+import { useSelector } from "react-redux";
 
 const PlaceItem = (props) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -14,6 +15,8 @@ const PlaceItem = (props) => {
         onOpen: delonOpen,
         onClose: delonClose,
     } = useDisclosure();
+
+    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
     return (
         <React.Fragment>
@@ -32,7 +35,10 @@ const PlaceItem = (props) => {
                 title="Are you sure you want to delete?"
                 footer="del"
             >
-                <Heading as="h4" my="2" fontSize="1.1rem" fontWeight="normal">This action is irreversible and the place will be lost forever.</Heading>
+                <Heading as="h4" my="2" fontSize="1.1rem" fontWeight="normal">
+                    This action is irreversible and the place will be lost
+                    forever.
+                </Heading>
             </Modal>
 
             <li className="place-item">
@@ -49,10 +55,14 @@ const PlaceItem = (props) => {
                         <Button inverse onClick={onOpen}>
                             VIEW ON MAP
                         </Button>
-                        <Button to={`/places/${props.id}`}>EDIT</Button>
-                        <Button danger onClick={delonOpen}>
-                            DELETE
-                        </Button>
+                        {isLoggedIn && (
+                            <>
+                                <Button to={`/places/${props.id}`}>EDIT</Button>
+                                <Button danger onClick={delonOpen}>
+                                    DELETE
+                                </Button>
+                            </>
+                        )}
                     </div>
                 </Card>
             </li>
