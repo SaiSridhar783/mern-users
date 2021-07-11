@@ -10,7 +10,7 @@ import {
     Button,
 } from "@chakra-ui/react";
 
-function ModalMain({ isOpen, onClose, children, title }) {
+function ModalMain({ isOpen, onClose, children, title, footer }) {
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose} size="lg">
@@ -22,11 +22,26 @@ function ModalMain({ isOpen, onClose, children, title }) {
                     <ModalCloseButton />
                     <ModalBody>{children}</ModalBody>
 
-                    <ModalFooter>
-                        <Button colorScheme="purple" mr={3} onClick={onClose}>
-                            Close
-                        </Button>
-                    </ModalFooter>
+                    {footer === "map" ? (
+                        <ModalFooter>
+                            <Button
+                                colorScheme="purple"
+                                mr={3}
+                                onClick={onClose}
+                            >
+                                Close
+                            </Button>
+                        </ModalFooter>
+                    ) : (
+                        <ModalFooter>
+                            <Button colorScheme="red" mr={3} onClick={onClose}>
+                                Close
+                            </Button>
+                            <Button variant="solid" colorScheme="green" onClick={console.log}>
+                                Continue
+                            </Button>
+                        </ModalFooter>
+                    )}
                 </ModalContent>
             </Modal>
         </>

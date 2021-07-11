@@ -7,7 +7,6 @@ import {
   VALIDATOR_MINLENGTH,
   VALIDATOR_REQUIRE,
 } from "../../shared/utils/validators";
-import "./NewPlace.css";
 
 const NewPlace = () => {
   const [formState, inputHandler] = useFormState(

@@ -9,8 +9,6 @@ import {
     VALIDATOR_REQUIRE,
 } from "../../shared/utils/validators";
 
-import "./NewPlace.css";
-
 const DUMMY_PLACES = [
     {
         id: "u1",
