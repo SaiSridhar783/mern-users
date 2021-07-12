@@ -21,7 +21,11 @@ router.post(
 	],
 	createPlace
 );
-router.patch("/:pid", updatePlace);
+router.patch(
+	"/:pid",
+	[check("title").notEmpty(), check("description").isLength({ min: 8 })],
+	updatePlace
+);
 router.delete("/:pid", deletePlace);
 
 module.exports = router;
