@@ -4,19 +4,10 @@ const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
-const DUMMY_USERS = [
-	{
-		id: "u1",
-		name: "Sai",
-		email: "sai@mail.com",
-		password: "12345678",
-	},
-];
-
 const getUsers = async (req, res, next) => {
 	let users;
 	try {
-		users = await User.find();
+		users = await User.find({}, "-password");
 	} catch (err) {
 		return next(new HttpError(err, 500));
 	}
