@@ -9,7 +9,7 @@ import {
     VALIDATOR_MINLENGTH,
     VALIDATOR_REQUIRE,
 } from "../../shared/utils/validators";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import "./Auth.css";
 import { authActions } from "../../store/authSlice";
@@ -18,6 +18,7 @@ import { useHistory } from "react-router";
 const Auth = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
+    const authRedux = useSelector((state) => state.auth);
 
     const [isLoginMode, setIsLoginMode] = useState(false);
     const [formState, inputHandler, setFormData] = useFormState(
@@ -58,11 +59,22 @@ const Auth = (props) => {
         }
         setIsLoginMode((prevMode) => !prevMode);
     };
+    console.log(authRedux);
 
-    const submitFormHandler = (event) => {
+
+    const submitFormHandler = async (event) => {
         event.preventDefault();
-        dispatch(authActions.login());
-        history.goBack();
+        if (isLoginMode) {
+            dispatch(
+                authActions.authLogin({
+                    name: formState.inputs.name.value,
+                    email: formState.inputs.email.value,
+                    password: formState.inputs.password.value,
+                })
+            );
+            //history.goBack();
+        } else {
+        }
     };
 
     return (
