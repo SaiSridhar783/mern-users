@@ -2,45 +2,39 @@ const uuid = require("uuid");
 const HttpError = require("../models/http-error");
 const { validationResult } = require("express-validator");
 const getCoordinatesForAddress = require("../util/location");
+const Place = require("../models/place");
 
-let DUMMY_PLACES = [
-	{
-		id: "p1",
-		title: "Empire State Building",
-		description:
-			"Empire State Building is a construction in New York City, United States, intended to be the largest and mostvisible structure in the world. It is the official home of the United States Government.",
-		location: {
-			lat: 40.7128,
-			lng: -74.0059,
-		},
-		address: "New York City, NY, USA",
-		image: "https://static.toiimg.com/photo/71579199.cms",
-		creator: "u1",
-	},
-];
-
-const getPlaceById = (req, res, next) => {
+const getPlaceById = async (req, res, next) => {
 	const { pid } = req.params;
-	const place = DUMMY_PLACES.find((p) => p.id === pid);
+	let place;
+	try {
+		place = await Place.findById(pid);
+	} catch (err) {
+		return next(new HttpError(err, 500));
+	}
 
 	if (!place) {
-		throw new HttpError(`Place with id: ${pid} not found`, 404);
+		return next(new HttpError(`Place with the given id not found`, 404));
 	}
 
-	res.json({ place });
+	res.json({ place: place.toObject({ getters: true }) });
 };
 
-const getPlacesByUserId = (req, res, next) => {
+const getPlacesByUserId = async (req, res, next) => {
 	const { uid } = req.params;
-	const userPlaces = DUMMY_PLACES.filter((p) => p.creator === uid);
 
-	if (!userPlaces || userPlaces.length === 0) {
-		return next(
-			new HttpError(`No places found for user with id: ${uid}`, 404)
-		);
+	let userPlaces;
+	try {
+		userPlaces = await Place.find({ creator: uid });
+	} catch (err) {
+		return next(new HttpError(err, 500));
 	}
 
-	res.json({ place: userPlaces });
+	if (!userPlaces || userPlaces.length === 0) {
+		return next(new HttpError(`No places found for the given user`, 404));
+	}
+
+	res.json({ place: userPlaces.map((p) => p.toObject({ getters: true })) });
 };
 
 const createPlace = async (req, res, next) => {
@@ -60,16 +54,20 @@ const createPlace = async (req, res, next) => {
 		return next(err);
 	}
 
-	const createdPlace = {
-		id: uuid.v4(),
+	const createdPlace = new Place({
 		title,
 		description,
-		location: coordinates,
 		address,
+		location: coordinates,
+		image,
 		creator,
-	};
+	});
 
-	DUMMY_PLACES.push(createdPlace);
+	try {
+		await createdPlace.save();
+	} catch (err) {
+		return next(new HttpError(err, 500));
+	}
 
 	res.status(201).json({ place: createdPlace });
 };

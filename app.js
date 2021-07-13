@@ -1,5 +1,8 @@
 const compression = require("compression");
 const logger = require("morgan");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const express = require("express");
 const app = express();
@@ -34,6 +37,16 @@ app.use((error, req, res, next) => {
 });
 
 // Start the server on a port
-app.listen(9001, () => {
-	console.log("Server started at http://localhost:9001");
-});
+
+mongoose
+	.connect(
+		`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@cluster0.dipfo.mongodb.net/mern-users-places?retryWrites=true&w=majority`
+	)
+	.then(() => {
+		app.listen(9001, () => {
+			console.log("Server started at http://localhost:9001");
+		});
+	})
+	.catch((err) => {
+		console.log(err);
+	});
