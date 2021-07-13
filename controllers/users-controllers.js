@@ -13,8 +13,15 @@ const DUMMY_USERS = [
 	},
 ];
 
-const getUsers = (req, res, next) => {
-	res.json({ users: DUMMY_USERS });
+const getUsers = async (req, res, next) => {
+	let users;
+	try {
+		users = await User.find();
+	} catch (err) {
+		return next(new HttpError(err, 500));
+	}
+
+	res.json({ users: users.map((user) => user.toObject({ getter: true })) });
 };
 
 const signup = async (req, res, next) => {
@@ -53,16 +60,25 @@ const signup = async (req, res, next) => {
 	res.status(201).json({ user: createdUser.toObject({ getters: true }) });
 };
 
-const login = (req, res, next) => {
+const login = async (req, res, next) => {
 	const { email, password } = req.body;
 
-	const identifiedUser = DUMMY_USERS.find((user) => user.email === email);
-	if (!identifiedUser || identifiedUser.password !== password) {
+	let existingUser;
+	try {
+		existingUser = await User.findOne({ email });
+	} catch (err) {
+		return next(new HttpError("Login Failed, try again later.", 500));
+	}
+
+	if (!existingUser) {
 		return next(
-			new HttpError(
-				"Could not authenticate user, check credentials again.",
-				401
-			)
+			new HttpError("User does not exist. PLease create an account.", 422)
+		);
+	}
+
+	if (existingUser.password !== password) {
+		return next(
+			new HttpError("Password does not match. Please try again.", 401)
 		);
 	}
 
