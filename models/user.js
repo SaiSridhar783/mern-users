@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
 		required: true,
 		default: "https://bankai-ecommerce.s3.amazonaws.com/media/sample.jpg",
 	},
-	places: { type: String, required: true },
+	places: [{ type: mongoose.Types.ObjectId, ref: "Place", required: true }],
 });
 
 userSchema.plugin(uniqueValidator);
