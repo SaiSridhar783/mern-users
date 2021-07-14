@@ -138,7 +138,8 @@ const deletePlace = async (req, res, next) => {
 		const session = await mongoose.startSession();
 		session.startTransaction();
 		await place.remove({ session });
-		place.creator.pull(place); // Remove place from user places array
+		console.log(place.creator.places)
+		place.creator.places = place.creator.places.filter(p => p!=pid); // Remove place from user places array
 		await place.creator.save({ session });
 		await session.commitTransaction();
 	} catch (err) {
