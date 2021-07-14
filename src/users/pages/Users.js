@@ -2,9 +2,12 @@ import React from "react";
 import UsersList from "../components/UsersList";
 import useSWR from "swr";
 import axios from "axios";
-import { Heading, Spinner } from "@chakra-ui/react";
+import { Spinner, useDisclosure } from "@chakra-ui/react";
+import Modal from "../../shared/components/UI/Modal";
 
 const Users = () => {
+    const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
+
     const getData = async (key) => {
         const response = await axios.get(key);
         return response;
@@ -31,9 +34,12 @@ const Users = () => {
 
     if (error) {
         return (
-            <Heading textAlign="center" color="whitesmoke" mt="20%">
-                Something went Wrong... &nbsp;{error.message}
-            </Heading>
+            <Modal isOpen={isOpen} onClose={onClose} title="ERROR">
+                {error.message}
+                <br />
+                <br />
+                <b>Try again Later</b>
+            </Modal>
         );
     }
 

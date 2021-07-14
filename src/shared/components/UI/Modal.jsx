@@ -16,7 +16,7 @@ function ModalMain({ isOpen, onClose, children, title, footer }) {
             <Modal isOpen={isOpen} onClose={onClose} size="lg">
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader bg="purple.600" color="white">
+                    <ModalHeader bg="purple.600" color="white" borderRadius="6px 6px 0 0">
                         {title}
                     </ModalHeader>
                     <ModalCloseButton />
