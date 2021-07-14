@@ -37,7 +37,7 @@ const UserPlaces = () => {
                 />
             ) : (
                 error && (
-                    <Alert status="error" my="2rem">
+                    <Alert status="error" my="2rem" maxWidth="38rem" mx="auto">
                         <AlertIcon />
                         {error}
                     </Alert>
