@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "../../shared/components/UI/Button/Button";
 import Card from "../../shared/components/UI/Card/Card";
 import Input from "../../shared/components/UI/Input/Input";

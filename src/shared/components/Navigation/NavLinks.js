@@ -8,6 +8,7 @@ import { authActions } from "../../../store/authSlice";
 
 const NavLinks = () => {
     const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn);
+    const uid = useSelector((state) => state.auth.login?.user?.user.id);
     const dispatch = useDispatch();
 
     return (
@@ -19,7 +20,7 @@ const NavLinks = () => {
             </li>
             {isLoggedIn && (
                 <li>
-                    <NavLink to="/u1/places">MY PLACES</NavLink>
+                    <NavLink to={`/${uid}/places`}>MY PLACES</NavLink>
                 </li>
             )}
             {isLoggedIn && (

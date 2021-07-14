@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import { Alert, AlertIcon, Spinner } from "@chakra-ui/react";
 
 const NewPlace = () => {
-    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const { isLoading, error, sendRequest } = useHttpClient();
     const history = useHistory();
     const [formState, inputHandler] = useFormState(
         {
