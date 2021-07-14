@@ -14,7 +14,7 @@ import Users from "./users/pages/Users.js";
 import { useSelector } from "react-redux";
 
 const App = () => {
-    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+    const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn);
 
     let routes;
     if (isLoggedIn) {

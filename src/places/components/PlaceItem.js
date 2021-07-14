@@ -16,7 +16,7 @@ const PlaceItem = (props) => {
         onClose: delonClose,
     } = useDisclosure();
 
-    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+    const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn);
 
     return (
         <React.Fragment>

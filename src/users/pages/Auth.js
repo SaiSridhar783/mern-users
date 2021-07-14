@@ -14,13 +14,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 import "./Auth.css";
 import { authActions } from "../../store/authSlice";
-import { useHistory } from "react-router";
 
 const Auth = (props) => {
     const dispatch = useDispatch();
-    const history = useHistory();
-    const { loading, error, user, isLoggedIn } = useSelector(
-        (state) => state.auth
+
+    const { loading, error, user } = useSelector((state) => state.auth);
+    const { loading: logLoading, error: logError } = useSelector(
+        (state) => state.auth.login
     );
 
     const [isLoginMode, setIsLoginMode] = useState(false);
@@ -124,7 +124,13 @@ const Auth = (props) => {
                     value={formState.inputs.password.value}
                     valid={formState.inputs.password.isValid}
                 />
-                {loading && (
+                {user && isLoginMode && (
+                    <Alert status="success" my="2rem">
+                        <AlertIcon />
+                        User created successfully! Continue to Login
+                    </Alert>
+                )}
+                {loading ? (
                     <Spinner
                         thickness="4px"
                         speed="0.65s"
@@ -135,12 +141,34 @@ const Auth = (props) => {
                         mb="1.1rem"
                         display="block"
                     />
+                ) : (
+                    error &&
+                    isLoginMode && (
+                        <Alert status="error" my="2rem">
+                            <AlertIcon />
+                            {error}
+                        </Alert>
+                    )
                 )}
-                {error && isLoginMode && (
-                    <Alert status="error" my="2rem">
-                        <AlertIcon />
-                        {error}
-                    </Alert>
+                {logLoading ? (
+                    <Spinner
+                        thickness="4px"
+                        speed="0.65s"
+                        emptyColor="gray.200"
+                        color="red"
+                        size="xl"
+                        mx="auto"
+                        mb="1.1rem"
+                        display="block"
+                    />
+                ) : (
+                    logError &&
+                    !isLoginMode && (
+                        <Alert status="error" my="2rem">
+                            <AlertIcon />
+                            {logError}
+                        </Alert>
+                    )
                 )}
                 <Button type="submit" disabled={!formState.isValid}>
                     {!isLoginMode ? "Login" : "Create Account"}

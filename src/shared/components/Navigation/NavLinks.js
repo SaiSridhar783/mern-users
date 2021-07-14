@@ -7,7 +7,7 @@ import "./NavLinks.css";
 import { authActions } from "../../../store/authSlice";
 
 const NavLinks = () => {
-    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+    const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn);
     const dispatch = useDispatch();
 
     return (
@@ -34,7 +34,7 @@ const NavLinks = () => {
             )}
             {isLoggedIn && (
                 <li>
-                    <button onClick={() => dispatch(authActions.logout())}>
+                    <button onClick={() => dispatch(authActions.authReset())}>
                         LOGOUT
                     </button>
                 </li>
