@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../shared/components/UI/Button/Button";
 import Card from "../../shared/components/UI/Card/Card";
 import Input from "../../shared/components/UI/Input/Input";
+import { Alert, AlertIcon, Spinner } from "@chakra-ui/react";
 
 import useFormState from "../../shared/hooks/useFormState";
 import {
@@ -18,7 +19,9 @@ import { useHistory } from "react-router";
 const Auth = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const authRedux = useSelector((state) => state.auth);
+    const { loading, error, user, isLoggedIn } = useSelector(
+        (state) => state.auth
+    );
 
     const [isLoginMode, setIsLoginMode] = useState(false);
     const [formState, inputHandler, setFormData] = useFormState(
@@ -59,21 +62,25 @@ const Auth = (props) => {
         }
         setIsLoginMode((prevMode) => !prevMode);
     };
-    console.log(authRedux);
-
 
     const submitFormHandler = async (event) => {
         event.preventDefault();
         if (isLoginMode) {
             dispatch(
-                authActions.authLogin({
+                authActions.authSignup({
                     name: formState.inputs.name.value,
                     email: formState.inputs.email.value,
                     password: formState.inputs.password.value,
                 })
             );
-            //history.goBack();
+            // history.goBack();
         } else {
+            dispatch(
+                authActions.authLogin({
+                    email: formState.inputs.email.value,
+                    password: formState.inputs.password.value,
+                })
+            );
         }
     };
 
@@ -117,6 +124,24 @@ const Auth = (props) => {
                     value={formState.inputs.password.value}
                     valid={formState.inputs.password.isValid}
                 />
+                {loading && (
+                    <Spinner
+                        thickness="4px"
+                        speed="0.65s"
+                        emptyColor="gray.200"
+                        color="red"
+                        size="xl"
+                        mx="auto"
+                        mb="1.1rem"
+                        display="block"
+                    />
+                )}
+                {error && isLoginMode && (
+                    <Alert status="error" my="2rem">
+                        <AlertIcon />
+                        {error}
+                    </Alert>
+                )}
                 <Button type="submit" disabled={!formState.isValid}>
                     {!isLoginMode ? "Login" : "Create Account"}
                 </Button>
