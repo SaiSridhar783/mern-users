@@ -10,13 +10,24 @@ import {
     Button,
 } from "@chakra-ui/react";
 
-function ModalMain({ isOpen, onClose, children, title, footer }) {
+function ModalMain({
+    isOpen,
+    onClose,
+    children,
+    title,
+    footer,
+    deleteHandler,
+}) {
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose} size="lg">
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader bg="purple.600" color="white" borderRadius="6px 6px 0 0">
+                    <ModalHeader
+                        bg="purple.600"
+                        color="white"
+                        borderRadius="6px 6px 0 0"
+                    >
                         {title}
                     </ModalHeader>
                     <ModalCloseButton />
@@ -32,12 +43,29 @@ function ModalMain({ isOpen, onClose, children, title, footer }) {
                                 Close
                             </Button>
                         </ModalFooter>
+                    ) : footer === "del" ? (
+                        <ModalFooter>
+                            <Button colorScheme="red" mr={3} onClick={onClose}>
+                                Close
+                            </Button>
+                            <Button
+                                variant="solid"
+                                colorScheme="green"
+                                onClick={deleteHandler}
+                            >
+                                Continue
+                            </Button>
+                        </ModalFooter>
                     ) : (
                         <ModalFooter>
                             <Button colorScheme="red" mr={3} onClick={onClose}>
                                 Close
                             </Button>
-                            <Button variant="solid" colorScheme="green" onClick={console.log}>
+                            <Button
+                                variant="solid"
+                                colorScheme="green"
+                                onClick={onClose}
+                            >
                                 Continue
                             </Button>
                         </ModalFooter>
