@@ -1,4 +1,3 @@
-const uuid = require("uuid");
 const HttpError = require("../models/http-error");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
@@ -63,7 +62,7 @@ const login = async (req, res, next) => {
 
 	if (!existingUser) {
 		return next(
-			new HttpError("User does not exist. PLease create an account.", 422)
+			new HttpError("User does not exist. Please create an account.", 422)
 		);
 	}
 
@@ -73,7 +72,10 @@ const login = async (req, res, next) => {
 		);
 	}
 
-	res.json({ message: "Logged In!" });
+	res.json({
+		message: "Logged In!",
+		user: existingUser.toObject({ getters: true }),
+	});
 };
 
 exports.getUsers = getUsers;

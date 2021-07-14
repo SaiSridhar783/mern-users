@@ -3,7 +3,12 @@ const mongoose = require("mongoose");
 const placeSchema = new mongoose.Schema({
 	title: { type: String, required: true },
 	description: { type: String, required: true },
-	image: { type: String, required: true },
+	image: {
+		type: String,
+		required: true,
+		default:
+			"https://bankai-ecommerce.s3.amazonaws.com/media/gorilla.jpeg",
+	},
 	address: { type: String, required: true },
 	location: {
 		lat: { type: Number, required: true },

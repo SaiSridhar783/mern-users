@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config();
 
+const cors = require("cors");
 const express = require("express");
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(logger("dev"));
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
 
 // Routes
 app.use("/api/places", placeRoutes);
@@ -40,7 +42,7 @@ app.use((error, req, res, next) => {
 
 mongoose
 	.connect(
-		`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@cluster0.dipfo.mongodb.net/mern-users-places?retryWrites=true&w=majority`
+		`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@cluster0.dipfo.mongodb.net/mern-users-places-prod?retryWrites=true&w=majority`
 	)
 	.then(() => {
 		app.listen(9001, () => {

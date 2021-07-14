@@ -28,7 +28,7 @@ const getPlacesByUserId = async (req, res, next) => {
 	try {
 		userPlaces = await Place.find({ creator: uid });
 	} catch (err) {
-		return next(new HttpError(err, 500));
+		return next(new HttpError(`Invalid User ID Provided`, 500));
 	}
 
 	if (!userPlaces || userPlaces.length === 0) {

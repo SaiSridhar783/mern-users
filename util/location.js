@@ -20,7 +20,7 @@ async function getCoordinatesForAddress(address) {
 			"Could not find location for the specified address.",
 			422
 		);
-		return next(error);
+		throw error;
 	}
 
 	const location = results.data[0];
