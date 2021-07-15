@@ -7,6 +7,7 @@ dotenv.config();
 const cors = require("cors");
 const express = require("express");
 const app = express();
+const aws = require("aws-sdk");
 
 const placeRoutes = require("./routes/places-routes");
 const userRoutes = require("./routes/users-routes");
@@ -28,7 +29,26 @@ app.use((req, res, next) => {
 	throw new HttpError("Route Not Found", 404);
 });
 
-app.use((error, req, res, next) => {
+aws.config.update({
+	secretAccessKey: process.env.S3_ACCESS_SECRET,
+	accessKeyId: process.env.S3_ACCESS_KEY,
+	region: "us-east-2",
+});
+
+const s3 = new aws.S3();
+app.use(async (error, req, res, next) => {
+	if (req.file) {
+		let params = { Bucket: "bankai-senbonzakura", Key: req.file.key };
+
+		await s3
+			.deleteObject(params, function (err, data) {
+				if (err) console.log(err, err.stack);
+				// error
+				else console.log("Deleted"); // deleted
+			})
+			.promise();
+	}
+
 	if (res.headersSent) {
 		return next(error);
 	}
@@ -42,7 +62,7 @@ app.use((error, req, res, next) => {
 
 mongoose
 	.connect(
-		`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@cluster0.dipfo.mongodb.net/mern-users-places-prod?retryWrites=true&w=majority`
+		`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@cluster0.dipfo.mongodb.net/mern-users-places?retryWrites=true&w=majority`
 	)
 	.then(() => {
 		app.listen(9001, () => {
