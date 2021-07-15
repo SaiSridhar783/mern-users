@@ -100,12 +100,11 @@ const PlaceItem = (props) => {
                         <p>{props.description}</p>
                     </div>
                     <div className="place-item__actions">
-                        <Button inverse onClick={onOpen}>
-                            VIEW ON MAP
-                        </Button>
+                        <Button onClick={onOpen}>VIEW ON MAP</Button>
                         {userId === props.creatorId && (
                             <>
                                 <Button to={`/places/${props.id}`}>EDIT</Button>
+
                                 <Button danger onClick={delonOpen}>
                                     DELETE
                                 </Button>
