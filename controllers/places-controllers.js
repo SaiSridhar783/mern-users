@@ -5,6 +5,19 @@ const mongoose = require("mongoose");
 const Place = require("../models/place");
 const User = require("../models/user");
 
+/* Deleting Bankai */
+const aws = require("aws-sdk");
+const dotenv = require("dotenv");
+dotenv.config();
+aws.config.update({
+	secretAccessKey: process.env.S3_ACCESS_SECRET,
+	accessKeyId: process.env.S3_ACCESS_KEY,
+	region: "us-east-2",
+});
+
+const s3 = new aws.S3();
+/*  */
+
 const getPlaceById = async (req, res, next) => {
 	const { pid } = req.params;
 	let place;
@@ -134,17 +147,29 @@ const deletePlace = async (req, res, next) => {
 		return next(new HttpError(`Place with the given id not found`, 404));
 	}
 
+	const imagePath = place.image;
+
 	try {
 		const session = await mongoose.startSession();
 		session.startTransaction();
 		await place.remove({ session });
-		console.log(place.creator.places);
 		place.creator.places = place.creator.places.filter((p) => p != pid); // Remove place from user places array
 		await place.creator.save({ session });
 		await session.commitTransaction();
 	} catch (err) {
 		return next(new HttpError(err, 500));
 	}
+
+	let params = {
+		Bucket: "bankai-senbonzakura",
+		Key: imagePath.split(".com/")[1],
+	};
+
+	s3.deleteObject(params, function (err, data) {
+		if (err) console.log(err, err.stack);
+		// error
+		else console.log("Deleted"); // deleted
+	});
 
 	res.status(201).json({ message: "Deleted Place!" });
 };
