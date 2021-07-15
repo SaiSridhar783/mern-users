@@ -2,6 +2,7 @@ const HttpError = require("../models/http-error");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const bcrypt = require("bcrypt");
 
 const getUsers = async (req, res, next) => {
 	let users;
@@ -34,11 +35,18 @@ const signup = async (req, res, next) => {
 		return next(new HttpError("User already exists. PLease login", 422));
 	}
 
+	let hashedPassword;
+	try {
+		hashedPassword = await bcrypt.hash(password, 14);
+	} catch (err) {
+		return next(new HttpError("Signing Up Failed, try again later.", 500));
+	}
+
 	const createdUser = new User({
 		name,
 		email,
 		image: req.file.location,
-		password,
+		password: hashedPassword,
 		places: [],
 	});
 
@@ -67,7 +75,19 @@ const login = async (req, res, next) => {
 		);
 	}
 
-	if (existingUser.password !== password) {
+	let isValidPassword;
+	try {
+		isValidPassword = await bcrypt.compare(password, existingUser.password);
+	} catch (err) {
+		return next(
+			new HttpError(
+				"Login Failed, check your credentials or  try again later.",
+				500
+			)
+		);
+	}
+
+	if (!isValidPassword) {
 		return next(
 			new HttpError("Password does not match. Please try again.", 401)
 		);
