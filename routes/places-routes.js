@@ -9,10 +9,13 @@ const {
 const router = express.Router();
 const { check } = require("express-validator");
 const { uploadPlace } = require("../util/imageS3");
+const checkAuth = require("../util/check-auth");
 const singleUpload = uploadPlace.single("image");
 
 router.get("/:pid", getPlaceById);
 router.get("/user/:uid", getPlacesByUserId);
+
+router.use(checkAuth);
 
 router.post(
 	"/",

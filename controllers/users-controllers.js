@@ -81,7 +81,7 @@ const login = async (req, res, next) => {
 	} catch (err) {
 		return next(
 			new HttpError(
-				"Login Failed, check your credentials or  try again later.",
+				"Login Failed, check your credentials or try again later.",
 				500
 			)
 		);
@@ -93,10 +93,18 @@ const login = async (req, res, next) => {
 		);
 	}
 
-	res.json({
-		message: "Logged In!",
-		user: existingUser.toObject({ getters: true }),
-	});
+	let token;
+	try {
+		token = jwt.sign(
+			{ userId: existingUser.id, email: existingUser.email },
+			"bankai",
+			{ expiresIn: "1h" }
+		);
+	} catch (err) {
+		return next(new HttpError("Login Failed, try again later.", 500));
+	}
+
+	res.json({ userId: existingUser.id, email: existingUser.email, token });
 };
 
 exports.getUsers = getUsers;
