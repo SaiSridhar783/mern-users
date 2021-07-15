@@ -2,9 +2,15 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { postThunk } from "../shared/utils/thunk-helper";
 
+const instance = axios.create({
+    headers: {
+        "Content-Type": "multipart/form-data",
+    },
+});
+
 const authSignup = createAsyncThunk(
     "auth/signup",
-    postThunk("http://localhost:9001/api/users/signup", axios)
+    postThunk("http://localhost:9001/api/users/signup", instance)
 );
 
 const authLogin = createAsyncThunk(

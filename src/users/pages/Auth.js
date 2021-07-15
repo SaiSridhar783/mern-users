@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import "./Auth.css";
 import { authActions } from "../../store/authSlice";
+import ImageUpload from "../../shared/components/UI/ImageUpload/ImageUpload";
 
 const Auth = (props) => {
     const dispatch = useDispatch();
@@ -44,6 +45,7 @@ const Auth = (props) => {
                 {
                     ...formState.inputs,
                     name: undefined,
+                    image: undefined,
                 },
                 formState.inputs.email.isValid &&
                     formState.inputs.password.isValid
@@ -56,6 +58,10 @@ const Auth = (props) => {
                         value: "",
                         isValid: false,
                     },
+                    image: {
+                        value: null,
+                        isValid: false,
+                    },
                 },
                 false
             );
@@ -66,13 +72,13 @@ const Auth = (props) => {
     const submitFormHandler = async (event) => {
         event.preventDefault();
         if (isLoginMode) {
-            dispatch(
-                authActions.authSignup({
-                    name: formState.inputs.name.value,
-                    email: formState.inputs.email.value,
-                    password: formState.inputs.password.value,
-                })
-            );
+            const formData = new FormData();
+            formData.append("email", formState.inputs.email.value);
+            formData.append("password", formState.inputs.password.value);
+            formData.append("name", formState.inputs.name.value);
+            formData.append("image", formState.inputs.image.value);
+            
+            dispatch(authActions.authSignup(formData));
             // history.goBack();
         } else {
             dispatch(
@@ -101,6 +107,9 @@ const Auth = (props) => {
                         value={formState.inputs.name.value}
                         valid={formState.inputs.name.isValid}
                     />
+                )}
+                {isLoginMode && (
+                    <ImageUpload center id="image" onInput={inputHandler} />
                 )}
                 <Input
                     id="email"
