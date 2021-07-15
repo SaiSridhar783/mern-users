@@ -8,12 +8,15 @@ const {
 } = require("../controllers/places-controllers");
 const router = express.Router();
 const { check } = require("express-validator");
+const { uploadPlace } = require("../util/imageS3");
+const singleUpload = uploadPlace.single("image");
 
 router.get("/:pid", getPlaceById);
 router.get("/user/:uid", getPlacesByUserId);
 
 router.post(
 	"/",
+	singleUpload,
 	[
 		check("title").notEmpty(),
 		check("description").isLength({ min: 8 }),

@@ -46,7 +46,7 @@ const createPlace = async (req, res, next) => {
 		);
 	}
 
-	const { title, description, address, image, creator } = req.body;
+	const { title, description, address, creator } = req.body;
 
 	let coordinates;
 	try {
@@ -60,7 +60,7 @@ const createPlace = async (req, res, next) => {
 		description,
 		address,
 		location: coordinates,
-		image,
+		image: req.file.location,
 		creator,
 	});
 
@@ -138,8 +138,8 @@ const deletePlace = async (req, res, next) => {
 		const session = await mongoose.startSession();
 		session.startTransaction();
 		await place.remove({ session });
-		console.log(place.creator.places)
-		place.creator.places = place.creator.places.filter(p => p!=pid); // Remove place from user places array
+		console.log(place.creator.places);
+		place.creator.places = place.creator.places.filter((p) => p != pid); // Remove place from user places array
 		await place.creator.save({ session });
 		await session.commitTransaction();
 	} catch (err) {
