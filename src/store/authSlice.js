@@ -49,17 +49,20 @@ const authSlice = createSlice({
         [authLogin.pending]: (state, action) => {
             state.login.loading = true;
             state.login.isLoggedIn = false;
+            state.login.token = null;
         },
         [authLogin.fulfilled]: (state, action) => {
             state.login.loading = false;
-            state.login.isLoggedIn = true;
             state.login.error = null;
-            state.login.user = action.payload;
+            state.login.userId = action.payload.userId;
+            state.login.token = action.payload.token;
+            state.login.isLoggedIn = !!state.login.token;
         },
         [authLogin.rejected]: (state, action) => {
             state.login.loading = false;
             state.login.isLoggedIn = false;
             state.login.error = action.payload;
+            state.login.token = null;
         },
     },
 });

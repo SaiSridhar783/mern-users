@@ -38,7 +38,7 @@ const NewPlace = () => {
         false
     );
 
-    const uid = useSelector((state) => state.auth.login.user.user.id);
+    const auth = useSelector((state) => state.auth.login);
 
     const placeSubmitHandler = async (e) => {
         e.preventDefault();
@@ -47,13 +47,14 @@ const NewPlace = () => {
             formData.append("title", formState.inputs.title.value);
             formData.append("description", formState.inputs.description.value);
             formData.append("address", formState.inputs.address.value);
-            formData.append("creator", uid);
+            formData.append("creator", auth.userId);
             formData.append("image", formState.inputs.image.value);
 
             await sendRequest(
                 "http://localhost:9001/api/places",
                 "POST",
-                formData
+                formData,
+                { Authorization: `Bearer ${auth.token}` }
             );
             history.push("/");
         } catch (err) {}

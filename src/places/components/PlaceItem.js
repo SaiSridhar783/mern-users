@@ -24,13 +24,16 @@ const PlaceItem = (props) => {
         onClose: delonClose,
     } = useDisclosure();
 
-    const userId = useSelector((state) => state.auth.login?.user?.user.id);
+    const userId = useSelector((state) => state.auth.login.userId);
+    const token = useSelector((state) => state.auth.login.token);
 
     const deletePlaceHandler = async () => {
         try {
             await sendRequest(
                 `http://localhost:9001/api/places/${props.id}`,
-                "DELETE"
+                "DELETE",
+                null,
+                { Authorization: `Bearer ${token}` }
             );
             props.onDelete(props.id);
         } catch (err) {}

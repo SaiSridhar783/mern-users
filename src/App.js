@@ -14,10 +14,10 @@ import Users from "./users/pages/Users.js";
 import { useSelector } from "react-redux";
 
 const App = () => {
-    const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn);
+    const token = useSelector((state) => state.auth.login.token);
 
     let routes;
-    if (isLoggedIn) {
+    if (token) {
         routes = (
             <Switch>
                 <Route path="/" component={Users} exact />

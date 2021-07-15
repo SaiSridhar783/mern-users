@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 
 const UpdatePlace = () => {
     const { isOpen, onClose, onOpen } = useDisclosure();
-    const auth = useSelector((state) => state.auth.login.user.user);
+    const auth = useSelector((state) => state.auth.login);
     const { isLoading, error, sendRequest } = useHttpClient();
     const [loadedPlace, setLoadedPlace] = useState();
     const placeId = useParams().placeId;
@@ -73,9 +73,12 @@ const UpdatePlace = () => {
                     title: formState.inputs.title.value,
                     description: formState.inputs.description.value,
                 }),
-                {"Content-Type": "application/json"}
+                {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${auth.token}`,
+                }
             );
-            history.push("/" + auth.id + "/places");
+            history.push("/" + auth.userId + "/places");
         } catch (err) {
             onOpen();
         }
