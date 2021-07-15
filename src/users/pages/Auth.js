@@ -77,7 +77,7 @@ const Auth = (props) => {
             formData.append("password", formState.inputs.password.value);
             formData.append("name", formState.inputs.name.value);
             formData.append("image", formState.inputs.image.value);
-            
+
             dispatch(authActions.authSignup(formData));
             // history.goBack();
         } else {
@@ -109,7 +109,12 @@ const Auth = (props) => {
                     />
                 )}
                 {isLoginMode && (
-                    <ImageUpload center id="image" onInput={inputHandler} />
+                    <ImageUpload
+                        center
+                        id="image"
+                        onInput={inputHandler}
+                        errorText="Please Provide an image"
+                    />
                 )}
                 <Input
                     id="email"

@@ -11,6 +11,7 @@ import {
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Alert, AlertIcon, Spinner } from "@chakra-ui/react";
+import ImageUpload from "../../shared/components/UI/ImageUpload/ImageUpload";
 
 const NewPlace = () => {
     const { isLoading, error, sendRequest } = useHttpClient();
@@ -29,25 +30,30 @@ const NewPlace = () => {
                 value: "",
                 isValid: false,
             },
+            image: {
+                value: null,
+                isValid: false,
+            },
         },
         false
     );
 
     const uid = useSelector((state) => state.auth.login.user.user.id);
-    console.log(uid);
 
     const placeSubmitHandler = async (e) => {
         e.preventDefault();
         try {
+            let formData = new FormData();
+            formData.append("title", formState.inputs.title.value);
+            formData.append("description", formState.inputs.description.value);
+            formData.append("address", formState.inputs.address.value);
+            formData.append("creator", uid);
+            formData.append("image", formState.inputs.image.value);
+
             await sendRequest(
                 "http://localhost:9001/api/places",
                 "POST",
-                JSON.stringify({
-                    title: formState.inputs.title.value,
-                    description: formState.inputs.description.value,
-                    address: formState.inputs.address.value,
-                    creator: uid,
-                })
+                formData
             );
             history.push("/");
         } catch (err) {}
@@ -80,6 +86,11 @@ const NewPlace = () => {
                 validators={[VALIDATOR_REQUIRE()]}
                 errorText="Please enter a valid address."
                 onInput={inputHandler}
+            />
+            <ImageUpload
+                id="image"
+                onInput={inputHandler}
+                errorText="Please Provide an image"
             />
             {isLoading ? (
                 <Spinner

@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 
 import App from "./App";
 import { ChakraProvider } from "@chakra-ui/react";
-
+import registerServiceWorker from "./registerServiceWorker";
 import { Provider } from "react-redux";
 import store from "./store/index";
 
@@ -17,3 +17,5 @@ ReactDOM.render(
     </Provider>,
     document.getElementById("root")
 );
+
+registerServiceWorker();
