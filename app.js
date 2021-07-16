@@ -1,5 +1,5 @@
 const compression = require("compression");
-const logger = require("morgan");
+//const logger = require("morgan");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config();
