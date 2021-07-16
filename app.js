@@ -65,7 +65,7 @@ mongoose
 		`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@cluster0.dipfo.mongodb.net/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`
 	)
 	.then(() => {
-		app.listen(9001, () => {
+		app.listen(process.env.PORT || 9001, () => {
 			console.log("Server started at http://localhost:9001");
 		});
 	})
