@@ -6,6 +6,7 @@ const store = configureStore({
     reducer: {
         auth: authSlice,
     },
+    devTools: process.env.REACT_APP_DEBUG === "true",
 });
 
 export default store;

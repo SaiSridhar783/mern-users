@@ -30,7 +30,7 @@ const PlaceItem = (props) => {
     const deletePlaceHandler = async () => {
         try {
             await sendRequest(
-                `http://localhost:9001/api/places/${props.id}`,
+                `${process.env.REACT_APP_BASE_URL}/places/${props.id}`,
                 "DELETE",
                 null,
                 { Authorization: `Bearer ${token}` }

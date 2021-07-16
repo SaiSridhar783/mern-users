@@ -13,7 +13,10 @@ const Users = () => {
         return response;
     };
 
-    const { data, error } = useSWR("http://localhost:9001/api/users", getData);
+    const { data, error } = useSWR(
+        `${process.env.REACT_APP_BASE_URL}/users`,
+        getData
+    );
 
     if (!error && !data) {
         return (

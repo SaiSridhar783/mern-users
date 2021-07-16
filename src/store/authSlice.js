@@ -10,12 +10,12 @@ const instance = axios.create({
 
 const authSignup = createAsyncThunk(
     "auth/signup",
-    postThunk("http://localhost:9001/api/users/signup", instance)
+    postThunk(`${process.env.REACT_APP_BASE_URL}/users/signup`, instance)
 );
 
 const authLogin = createAsyncThunk(
     "auth/login",
-    postThunk("http://localhost:9001/api/users/login", axios)
+    postThunk(`${process.env.REACT_APP_BASE_URL}/users/login`, axios)
 );
 
 const initialState = {

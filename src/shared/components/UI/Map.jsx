@@ -3,8 +3,7 @@ import React from "react";
 import ReactMapboxGl, { Layer, Feature } from "react-mapbox-gl";
 
 const Map = ReactMapboxGl({
-    accessToken:
-        "pk.eyJ1Ijoic2Fpc3JpZGhhciIsImEiOiJja3F4Z3V0YncwMHB1MndzNmIyZjhrMTMxIn0.K4KHxCX8T3rGbNCGMesXkw",
+    accessToken: process.env.REACT_APP_MAPBOX_KEY,
 });
 
 const MapComp = ({ lat, lng }) => {
