@@ -20,14 +20,14 @@ app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 //app.use(cors());
-app.use(express.static(path.join("public")));
 
 // Routes
 app.use("/api/places", placeRoutes);
 app.use("/api/users", userRoutes);
 
-app.use((req, res, next) => {
-	res.sendFile(path.join(__dirname, "public", "index.html"));
+app.use(express.static(path.resolve(__dirname, "client", "public")));
+app.get("/", (req, res, next) => {
+	res.sendFile(path.resolve(__dirname, "client", "public", "index.html"));
 });
 
 // Error Handling
