@@ -4,30 +4,36 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const cors = require("cors");
+//const cors = require("cors");
 const express = require("express");
 const app = express();
 const aws = require("aws-sdk");
 
 const placeRoutes = require("./routes/places-routes");
 const userRoutes = require("./routes/users-routes");
-const HttpError = require("./models/http-error");
+//const HttpError = require("./models/http-error");
+const path = require("path");
 
 // Middlewares
-app.use(logger("dev"));
+//app.use(logger("dev"));
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors());
+//app.use(cors());
+app.use(express.static(path.join("public")));
 
 // Routes
 app.use("/api/places", placeRoutes);
 app.use("/api/users", userRoutes);
 
-// Error Handling
 app.use((req, res, next) => {
-	throw new HttpError("Route Not Found", 404);
+	res.sendFile(path.join(__dirname, "public", "index.html"));
 });
+
+// Error Handling
+/* app.use((req, res, next) => {
+	throw new HttpError("Route Not Found", 404);
+}); */
 
 aws.config.update({
 	secretAccessKey: process.env.S3_ACCESS_SECRET,
