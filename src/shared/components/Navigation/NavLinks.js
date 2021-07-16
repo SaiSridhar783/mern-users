@@ -8,7 +8,7 @@ import { authActions } from "../../../store/authSlice";
 
 const NavLinks = () => {
     const isLoggedIn = useSelector((state) => state.auth.login.isLoggedIn);
-    const uid = useSelector((state) => state.auth.login?.user?.user.id);
+    const uid = useSelector((state) => state.auth.login.userId);
     const dispatch = useDispatch();
 
     return (

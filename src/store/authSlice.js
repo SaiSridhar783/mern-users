@@ -18,17 +18,21 @@ const authLogin = createAsyncThunk(
     postThunk("http://localhost:9001/api/users/login", axios)
 );
 
+const initialState = {
+    login: { isLoggedIn: false },
+};
+
 const authSlice = createSlice({
     name: "auth",
-    initialState: {
-        login: { isLoggedIn: false },
-    },
+    initialState,
     reducers: {
         authReset: (state) => {
-            state = {
-                login: { isLoggedIn: false },
-            };
+            state = initialState;
+            localStorage.removeItem("userData");
             return state;
+        },
+        localLogin: (state, action) => {
+            state.login = { ...action.payload, isLoggedIn: true };
         },
     },
     extraReducers: {
@@ -57,6 +61,17 @@ const authSlice = createSlice({
             state.login.userId = action.payload.userId;
             state.login.token = action.payload.token;
             state.login.isLoggedIn = !!state.login.token;
+
+            localStorage.setItem(
+                "userData",
+                JSON.stringify({
+                    userId: state.login.userId,
+                    token: state.login.token,
+                    expiration: new Date(
+                        new Date().getTime() + 1000 * 60 * 60
+                    ).toISOString(),
+                })
+            );
         },
         [authLogin.rejected]: (state, action) => {
             state.login.loading = false;

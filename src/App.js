@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     BrowserRouter as Router,
     Redirect,
@@ -11,10 +11,46 @@ import UserPlaces from "./places/pages/UserPlaces.js";
 import MainNavigation from "./shared/components/Navigation/MainNavigation.js";
 import Auth from "./users/pages/Auth.js";
 import Users from "./users/pages/Users.js";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { authActions } from "./store/authSlice.js";
+
+let logoutTimer;
 
 const App = () => {
+    const tokenExpirationDate = useSelector(
+        (state) => state.auth.login.expiration
+    );
     const token = useSelector((state) => state.auth.login.token);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const storedData = JSON.parse(localStorage.getItem("userData"));
+        if (
+            storedData &&
+            storedData.token &&
+            new Date() < new Date(storedData.expiration)
+        ) {
+            dispatch(
+                authActions.localLogin({
+                    ...storedData,
+                    expiration: new Date(storedData.expiration).toISOString(),
+                })
+            );
+        }
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (token && tokenExpirationDate) {
+            const remainingTime =
+                new Date(tokenExpirationDate).getTime() - new Date().getTime();
+
+            logoutTimer = setTimeout(() => {
+                dispatch(authActions.authReset());
+            }, remainingTime);
+        } else {
+            clearTimeout(logoutTimer);
+        }
+    }, [token, tokenExpirationDate, dispatch]);
 
     let routes;
     if (token) {
