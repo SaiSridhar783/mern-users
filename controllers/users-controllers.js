@@ -4,6 +4,9 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 
+const dotenv = require("dotenv");
+dotenv.config();
+
 const getUsers = async (req, res, next) => {
 	let users;
 	try {
@@ -100,7 +103,7 @@ const login = async (req, res, next) => {
 	try {
 		token = jwt.sign(
 			{ userId: existingUser.id, email: existingUser.email },
-			"bankai",
+			process.env.JWT_KEY,
 			{ expiresIn: "1h" }
 		);
 	} catch (err) {

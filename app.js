@@ -62,7 +62,7 @@ app.use(async (error, req, res, next) => {
 
 mongoose
 	.connect(
-		`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@cluster0.dipfo.mongodb.net/mern-users-places?retryWrites=true&w=majority`
+		`mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@cluster0.dipfo.mongodb.net/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`
 	)
 	.then(() => {
 		app.listen(9001, () => {
