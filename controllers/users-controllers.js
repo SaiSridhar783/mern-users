@@ -56,7 +56,10 @@ const signup = async (req, res, next) => {
 		return next(new HttpError("Signing Up Failed, try again later.", 500));
 	}
 
-	res.status(201).json({ user: createdUser.toObject({ getters: true }) });
+	let sending = createdUser.toObject({ getters: true });
+	delete sending.password;
+
+	res.status(201).json({ user: sending });
 };
 
 const login = async (req, res, next) => {
