@@ -10,6 +10,7 @@ const MapComp = ({ lat, lng }) => {
     return (
         <Map
             //style="mapbox://styles/mapbox/streets-v11"
+            //eslint-disable-next-line
             style="mapbox://styles/saisridhar/ckqz2mkxo1fqv18p3h09exyes"
             zoom={[12]}
             center={[lng, lat]}
